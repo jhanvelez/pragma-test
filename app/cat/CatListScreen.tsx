@@ -1,15 +1,16 @@
 import { useListBreedsQuery } from '@/app/api/catApi';
-import CatCard from '@/app/cat/CatCard';
 import SearchBar from '@/app/components/SearchBar';
 import { useRouter } from 'expo-router';
 import React, { useMemo, useState } from 'react';
 import { FlatList, Text, View } from 'react-native';
+import CatCard from './CatCard';
 
 export default function CatListScreen() {
   const { data: breeds, error, isLoading } = useListBreedsQuery();
   const [search, setSearch] = useState('');
   const router = useRouter();
 
+  // Filtrado en memoria
   const filteredBreeds = useMemo(() => {
     if (!breeds) return [];
     return breeds.filter(b =>
