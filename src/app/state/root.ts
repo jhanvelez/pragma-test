@@ -1,4 +1,4 @@
-import { api } from '@/app/api/rtkApi';
+import { api } from '@/src/api/rtkApi';
 import { combineReducers } from '@reduxjs/toolkit';
 
 export default combineReducers({

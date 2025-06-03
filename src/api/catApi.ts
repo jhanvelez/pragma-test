@@ -1,5 +1,5 @@
-import { api } from '@/app/api/rtkApi';
-import { TCatBreed, TCatImageResponse } from '@/app/cat/CatRequest';
+import { api } from '@/src/api/rtkApi';
+import { TCatBreed, TCatImageResponse } from '@/src/app/cat/CatRequest';
 
 export const catApi = api.injectEndpoints({
   endpoints: (build) => ({

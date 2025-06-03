@@ -1,4 +1,4 @@
-import appConfig from '@/app/appConfig';
+import appConfig from '@/src/app/appConfig';
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
 const CAT_API_KEY = 'live_99Qe4Ppj34NdplyLW67xCV7Ds0oSLKGgcWWYnSzMJY9C0QOu0HUR4azYxWkyW2nr';

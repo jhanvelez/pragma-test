@@ -1,4 +1,4 @@
-import { useGetCatImagesByBreedQuery } from '@/app/api/catApi';
+import { useGetCatImagesByBreedQuery } from '@/src/api/catApi';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import React from 'react';
 import { Button, Image, ScrollView, StyleSheet, Text } from 'react-native';

@@ -1,4 +1,4 @@
-import { api } from '@/app/api/rtkApi';
+import { api } from '@/src/api/rtkApi';
 import { configureStore } from '@reduxjs/toolkit';
 
 const store = configureStore({

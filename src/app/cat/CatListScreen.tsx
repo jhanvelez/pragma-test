@@ -1,5 +1,5 @@
-import { useListBreedsQuery } from '@/app/api/catApi';
-import SearchBar from '@/app/components/SearchBar';
+import { useListBreedsQuery } from '@/src/api/catApi';
+import SearchBar from '@/src/features/cats/components/SearchBar';
 import { useRouter } from 'expo-router';
 import React, { useMemo, useState } from 'react';
 import { FlatList, Text, View } from 'react-native';
