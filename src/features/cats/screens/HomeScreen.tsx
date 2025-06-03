@@ -6,33 +6,40 @@ import React, { useMemo, useState } from 'react';
 import { FlatList, Text, View } from 'react-native';
 
 export default function HomeScreen() {
-    const { data: breeds, error, isLoading } = useListBreedsQuery();
-    const [search, setSearch] = useState('');
-    const router = useRouter();
-  
-    const filteredBreeds = useMemo(() => {
-      if (!breeds) return [];
-      return breeds.filter(b =>
-        b.name.toLowerCase().includes(search.toLowerCase())
-      );
-    }, [breeds, search]);
-  
-    if (isLoading) return <Text>Cargando...</Text>;
-    if (error) return <Text>Error al cargar datos</Text>;
+  const [search, setSearch] = useState('');
+  const router = useRouter();
+
+  const { data: breeds, error, isLoading } = useListBreedsQuery(search, {
+    skip: !search.trim(),
+  });
+
+  const filteredBreeds = useMemo(() => {
+    if (!breeds) return [];
+    return breeds;
+  }, [breeds]);
+
+  if (isLoading) return <Text>Cargando...</Text>;
+  if (error) return <Text>Error al cargar datos</Text>;
 
   return (
     <View style={{ flex: 1, padding: 16 }}>
       <SearchBar value={search} onChange={setSearch} />
-      <FlatList
-        data={filteredBreeds}
-        keyExtractor={item => item.id}
-        renderItem={({ item }) => (
-          <CatCard
-            breed={item}
-            onPress={() => router.push({ pathname: '/cat/detail', params: { id: item.id } })}
-          />
-        )}
-      />
+      {!search.trim() ? (
+        <Text>Escribe algo para buscar una raza</Text>
+      ) : (
+        <FlatList
+          data={filteredBreeds}
+          keyExtractor={(item) => item.id}
+          renderItem={({ item }) => (
+            <CatCard
+              breed={item}
+              onPress={() =>
+                router.push({ pathname: '/cat/detail', params: { id: item.id } })
+              }
+            />
+          )}
+        />
+      )}
     </View>
   );
 }
