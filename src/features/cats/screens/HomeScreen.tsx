@@ -1,13 +1,14 @@
 import { useListBreedsQuery } from '@/src/api/catApi';
 import CatCard from '@/src/app/cat/CatCard';
 import SearchBar from '@/src/features/cats/components/SearchBar';
-import { useRouter } from 'expo-router';
-import React, { useMemo, useState } from 'react';
+import { useNavigation, useRouter } from 'expo-router';
+import React, { useEffect, useMemo, useState } from 'react';
 import { FlatList, Text, View } from 'react-native';
 
 export default function HomeScreen() {
   const [search, setSearch] = useState('');
   const router = useRouter();
+  const navigation = useNavigation();
 
   const { data: breeds, error, isLoading } = useListBreedsQuery(search, {
     skip: !search.trim(),
@@ -17,6 +18,10 @@ export default function HomeScreen() {
     if (!breeds) return [];
     return breeds;
   }, [breeds]);
+
+  useEffect(() => {
+    navigation.setOptions?.({ title: 'Catbreeds' });
+  }, [navigation]);
 
   if (isLoading) return <Text>Cargando...</Text>;
   if (error) return <Text>Error al cargar datos</Text>;
@@ -34,7 +39,7 @@ export default function HomeScreen() {
             <CatCard
               breed={item}
               onPress={() =>
-                router.push({ pathname: '/cat/detail', params: { id: item.id } })
+                router.push({ pathname: '/cat/detail', params: { breed: JSON.stringify(item) } })
               }
             />
           )}

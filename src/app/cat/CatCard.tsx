@@ -13,13 +13,11 @@ export default function CatCard({ breed, onPress, imageUrl }: Props) {
   const imageSrc = breed.image?.url || imageUrl;
 
   if (!imageSrc) {
-    console.log('No image available for breed:', breed.name);
-    return null; // No image available
+    return null;
   }
 
   return (
     <View style={styles.card}>
-      {/* Parte superior: nombre y botón "Más..." */}
       <View style={styles.header}>
         <Text style={styles.title}>{breed.name}</Text>
         <TouchableOpacity onPress={onPress} style={styles.moreButton}>
@@ -27,14 +25,12 @@ export default function CatCard({ breed, onPress, imageUrl }: Props) {
         </TouchableOpacity>
       </View>
 
-      {/* Imagen */}
       <Image
         source={{ uri: imageSrc }}
         style={styles.image}
         resizeMode="cover"
       />
 
-      {/* Pie inferior con origen a la izquierda e inteligencia a la derecha */}
       <View style={styles.footer}>
         <Text style={styles.leftText}>Origen: {breed.origin || 'Desconocido'}</Text>
         <Text style={styles.rightText}>Inteligencia: {breed.intelligence ?? '-'}</Text>

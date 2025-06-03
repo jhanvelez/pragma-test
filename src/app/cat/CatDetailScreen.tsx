@@ -1,60 +1,89 @@
-import { useGetCatImagesByBreedQuery } from '@/src/api/catApi';
-import { useLocalSearchParams, useRouter } from 'expo-router';
-import React from 'react';
-import { Button, Image, ScrollView, StyleSheet, Text } from 'react-native';
+import { useLocalSearchParams, useNavigation } from 'expo-router';
+import React, { useEffect } from 'react';
+import {
+  Dimensions,
+  Image,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View
+} from 'react-native';
 
 const DEFAULT_IMAGE = 'https://cdn2.thecatapi.com/images/0XYvRd7oD.jpg';
+const { height: screenHeight } = Dimensions.get('window');
 
 export default function CatDetailScreen() {
-  const { id } = useLocalSearchParams<{ id: string }>();
-  const router = useRouter();
+  const { breed: breedStr } = useLocalSearchParams<{ breed: string }>();
+  const navigation = useNavigation();
 
-  const { data, isLoading, error } = useGetCatImagesByBreedQuery({ breedId: id });
+  const breed = JSON.parse(breedStr);
+  const imageUrl = breed.image?.url || DEFAULT_IMAGE;
 
-  if (isLoading) return <Text>Cargando...</Text>;
-  if (error || !data || data.length === 0) return <Text>No se encontró información.</Text>;
+  useEffect(() => {
+    navigation.setOptions?.({ title: breed.name });
+  }, [breed.name, navigation]);
 
-  const breed = data[0].breeds[0];
-  const imageUrl = data[0].url || DEFAULT_IMAGE;
+  if (!breedStr) return <Text>No hay información para mostrar.</Text>;
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
-      <Image source={{ uri: imageUrl }} style={styles.image} />
-      <Text style={styles.title}>{breed.name}</Text>
-      <Text style={styles.text}>Origen: {breed.origin}</Text>
-      <Text style={styles.text}>Temperamento: {breed.temperament}</Text>
-      <Text style={styles.text}>Esperanza de vida: {breed.life_span} años</Text>
-      <Text style={styles.text}>Peso: {breed.weight.metric} kg</Text>
-      <Button title="Volver" onPress={() => router.back()} />
-    </ScrollView>
+    <View style={styles.container}>
+      <Image source={{ uri: imageUrl }} style={styles.image} resizeMode="cover" />
+
+      <ScrollView contentContainerStyle={styles.infoContainer}>
+        {breed.description && (
+          <>
+            <Text style={styles.sectionTitle}>Descripción:</Text>
+            <Text style={styles.text}>{breed.description}</Text>
+          </>
+        )}
+
+        <Text style={styles.text}><Text style={styles.bold}>Origen:</Text> {breed.origin}</Text>
+        <Text style={styles.text}><Text style={styles.bold}>Temperamento:</Text> {breed.temperament}</Text>
+        <Text style={styles.text}><Text style={styles.bold}>Esperanza de vida:</Text> {breed.life_span} años</Text>
+        <Text style={styles.text}><Text style={styles.bold}>Peso:</Text> {breed.weight.metric} kg</Text>
+        <Text style={styles.text}><Text style={styles.bold}>Inteligencia:</Text> {breed.intelligence}</Text>
+        <Text style={styles.text}><Text style={styles.bold}>Nivel de energía:</Text> {breed.energy_level}</Text>
+        <Text style={styles.text}><Text style={styles.bold}>Nivel de afecto:</Text> {breed.affection_level}</Text>
+      </ScrollView>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    alignItems: 'center',
-    padding: 20,
+    flex: 1,
   },
   image: {
-    width: 250,
-    height: 250,
-    borderRadius: 10,
-    marginBottom: 20,
+    height: screenHeight * 0.5,
+    width: '100%',
     backgroundColor: '#eee',
   },
+  infoContainer: {
+    padding: 20,
+    paddingBottom: 40,
+  },
   title: {
-    fontSize: 24,
+    fontSize: 28,
     fontWeight: 'bold',
-    marginBottom: 10,
+    marginBottom: 15,
+    textAlign: 'center',
+  },
+  sectionTitle: {
+    fontSize: 18,
+    fontWeight: '600',
+    marginTop: 10,
+    marginBottom: 5,
   },
   text: {
     fontSize: 16,
-    marginBottom: 6,
-    textAlign: 'center',
+    marginBottom: 8,
+    lineHeight: 22,
   },
-  link: {
-    color: '#007AFF',
-    marginBottom: 20,
-    textDecorationLine: 'underline',
+  bold: {
+    fontWeight: 'bold',
+  },
+  buttonWrapper: {
+    marginTop: 20,
+    alignItems: 'center',
   },
 });

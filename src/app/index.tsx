@@ -11,7 +11,7 @@ export default function Index() {
 
   useEffect(() => {
     const load = async () => {
-      await new Promise((res) => setTimeout(res, 2000)); // Simula precarga
+      await new Promise((res) => setTimeout(res, 2000));
       await SplashScreen.hideAsync();
       setIsReady(true);
     };

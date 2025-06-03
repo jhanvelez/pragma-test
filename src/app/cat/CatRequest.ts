@@ -19,6 +19,8 @@ export type TCatBreed = {
     imperial: string;
     metric: string;
   };
+  energy_level: number;
+  affection_level: number;
 };
 
 export type TCatImageResponse = {
